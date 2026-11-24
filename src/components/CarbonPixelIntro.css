@@ -1,0 +1,24 @@
+/* ==========================================================================
+   Pixel carbon-fibre intro
+   ========================================================================== */
+.cpx {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: #05070a;
+  pointer-events: none;
+  transition: background-color 0.25s ease;
+}
+
+/* once the pixels start dropping out, the page shows through the gaps */
+.cpx.is-leaving {
+  background: transparent;
+}
+
+.cpx__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
