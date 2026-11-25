@@ -8,6 +8,10 @@ import SiteNavbar from './components/SiteNavbar';
 import CookieConsent from './components/CookieConsent';
 import ScrambleText from './components/ScrambleText';
 import CarbonPixelIntro from './components/CarbonPixelIntro';
+import HeroForge from './components/HeroForge';
+import OurWork from './components/OurWork';
+import ProcessSteps from './components/ProcessSteps';
+import PixelReveal from './components/PixelReveal';
 
 const sectors = [
   {
@@ -15,7 +19,8 @@ const sectors = [
     number: '01',
     name: 'AEROSPACE',
     tagline: 'UAV & AIRFRAME STRUCTURES',
-    image: '/images/aerospace_uav.jpg',
+    image: '/images/sector-aerospace.jpg',
+    fallback: '/images/aerospace_uav.jpg',
     heading: 'LIGHTWEIGHT BY DESIGN. STRONG BY ENGINEERING.',
     description: 'High-performance composite structures engineered for unmanned systems and aerospace applications where strength, stiffness and reliability are mission critical.',
     capabilities: [
@@ -31,7 +36,9 @@ const sectors = [
     number: '02',
     name: 'UAV & DEFENCE',
     tagline: 'TACTICAL & SURVEILLANCE SYSTEMS',
-    image: '/images/precision_composite_hardware.jpg',
+    image: '/images/sector-uav-defence.jpg',
+    imagePosition: '72% center',
+    fallback: '/images/precision_composite_hardware.jpg',
     heading: 'ENGINEERED FOR EXTREME MISSION DEMANDS.',
     description: 'Advanced composite solutions for unmanned tactical systems, high-altitude surveillance, and ruggedized hardware built to withstand extreme environmental stress.',
     capabilities: [
@@ -47,7 +54,8 @@ const sectors = [
     number: '03',
     name: 'AUTOMOTIVE',
     tagline: 'MOTORSPORT & HIGH-PERFORMANCE MOBILITY',
-    image: '/images/hero_carbon_weave.jpg',
+    image: '/images/sector-automotive.jpg',
+    fallback: '/images/hero_carbon_weave.jpg',
     heading: 'RACE-PROVEN RIGIDITY WITH WEIGHT REDUCTION.',
     description: 'Performance-driven CFRP components delivering maximum structural efficiency, low unsprung mass, and flawless cosmetic weaves for supercars and next-gen mobility.',
     capabilities: [
@@ -63,7 +71,8 @@ const sectors = [
     number: '04',
     name: 'MEDICAL',
     tagline: 'PROSTHETICS & PRECISION BIOMEDICAL',
-    image: '/images/portrait_composite_part.jpg',
+    image: '/images/sector-medical.jpg',
+    fallback: '/images/portrait_composite_part.jpg',
     heading: 'BIO-COMPATIBLE & ERGONOMIC PRECISION.',
     description: 'Ultra-lightweight composites custom-tailored for dynamic prosthetics, surgical robotic arms, and medical imaging structures requiring X-ray radiolucency and fatigue durability.',
     capabilities: [
@@ -79,7 +88,8 @@ const sectors = [
     number: '05',
     name: 'SPORTS',
     tagline: 'ELITE ATHLETIC & RACING SYSTEMS',
-    image: '/images/custom_sheets_tubes.jpg',
+    image: '/images/sector-sports.jpg',
+    fallback: '/images/custom_sheets_tubes.jpg',
     heading: 'PRECISION, STIFFNESS & COMPETITIVE POWER.',
     description: 'Precision sporting composites delivering maximum energy transfer, structural resilience, and vibration damping for competitive athletes and high-performance equipment.',
     capabilities: [
@@ -125,6 +135,7 @@ const deliverables = [
 export default function App() {
   const [route, setRoute] = useState(() => window.location.hash);
   const [heroTextReady, setHeroTextReady] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
   const [capabilitiesVisible, setCapabilitiesVisible] = useState(false);
   const [productsVisible, setProductsVisible] = useState(false);
   const [activeSector, setActiveSector] = useState(0);
@@ -203,10 +214,11 @@ export default function App() {
   if (route === '#careers') return <><CareersPage /><CookieConsent /></>;
   if (route.startsWith('#sector-')) return <><SectorPage sector={route.slice(8)} /><CookieConsent /></>;
   return <div className="pdf-site">
-    <CarbonPixelIntro onComplete={() => setHeroTextReady(true)} />
+    <CarbonPixelIntro onComplete={() => setIntroDone(true)} />
     <SiteNavbar />
     <main>
       <section id="home" className="pdf-hero">
+        <HeroForge play={introDone} onFinish={() => setHeroTextReady(true)} />
         <div className="pdf-hero-inner">
           <h1 className={`hero-statement ${heroTextReady ? 'is-animated' : ''}`}>
             <div className="line-wrapper">
@@ -238,6 +250,9 @@ export default function App() {
       </section>
       <section id="capabilities" ref={capabilitiesRef} className={`pdf-capabilities-section ${capabilitiesVisible ? 'is-visible' : ''}`}>
         <div className="capabilities-intro-bar">
+          <div className="sectors-lineup" aria-hidden="true">
+            <img src="/images/sectors-lineup.png" alt="" />
+          </div>
           <div className="capabilities-heading">
             <span className="capabilities-kicker">Sectors</span>
             <h2>ENGINEERED<br /><em>ACROSS</em><br />INDUSTRIES.</h2>
@@ -251,9 +266,6 @@ export default function App() {
         <div ref={sectorsRunwayRef} className="sectors-runway">
           <div className="sectors-sticky-stage">
             {/* Ironova-style process layout */}
-            <div className="wp-bg" key={`bg-${sectors[activeSector].id}`} aria-hidden="true">
-              <img src={sectors[activeSector].image} alt="" />
-            </div>
 
             <nav className="wp-tabs" aria-label="Sectors">
               {sectors.map((s, index) => (
@@ -272,10 +284,17 @@ export default function App() {
 
             <div className="wp-stage" key={sectors[activeSector].id}>
               <div className="wp-number" aria-hidden="true">{sectors[activeSector].number}</div>
+              <div className="wp-name">{titleCase(sectors[activeSector].name)}</div>
 
               <div className="wp-body">
                 <a href={sectors[activeSector].route} className="wp-media" aria-label={`Explore ${titleCase(sectors[activeSector].name)}`}>
-                  <img src={sectors[activeSector].image} alt="" />
+                  <img
+                    src={sectors[activeSector].image}
+                    style={{ objectPosition: sectors[activeSector].imagePosition || 'center' }}
+                    alt=""
+                    onError={(e) => { const fb = sectors[activeSector].fallback; if (fb && !e.currentTarget.src.endsWith(fb)) e.currentTarget.src = fb; }}
+                  />
+                  <PixelReveal />
                 </a>
 
                 <div className="wp-copy">
@@ -302,16 +321,8 @@ export default function App() {
           <p>End-to-end composite manufacturing and precision machining capabilities to deliver high-performance, reliable, and customized solutions.</p>
         </div>
         <div className="mc-core">
-          <h3 className="mc-sub">Core capabilities</h3>
-          <ol className="mc-list">
-            {coreCapabilities.map(({ title, description }, index) => (
-              <li key={title}>
-                <span className="mc-list__num">{String(index + 1).padStart(2, '0')}</span>
-                <h4>{title}</h4>
-                <p>{description}</p>
-              </li>
-            ))}
-          </ol>
+          <h3 className="mc-sub">Our process</h3>
+          <ProcessSteps />
         </div>
         <figure className="mc-feature">
           <img src="/images/about-factory-hero.png" alt="Composite manufacturing facility" />
@@ -334,7 +345,14 @@ export default function App() {
         <div className="pc-grid">
           {products.map(([number, name, features, image]) => (
             <article className="pc-item" key={name}>
-              <a href="#contact" className="pc-media" aria-label={`Request a specification for ${titleCase(name)}`}><img src={image} alt="" loading="lazy" /></a>
+              <a href="#contact" className="pc-media" aria-label={`Request a specification for ${titleCase(name)}`}>
+                <img
+                  src={`/images/product-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.jpg`}
+                  alt=""
+                  loading="lazy"
+                  onError={(e) => { if (!e.currentTarget.src.endsWith(image)) e.currentTarget.src = image; }}
+                />
+              </a>
               <div className="pc-head"><h3>{titleCase(name)}</h3><span>{number}</span></div>
               <ul className="pc-specs">
                 {features.split('|').map((feature) => <li key={feature}>{feature === feature.toUpperCase() ? titleCase(feature) : feature}</li>)}
@@ -344,6 +362,7 @@ export default function App() {
           ))}
         </div>
       </section>
+      <OurWork />
       <section id="contact" className="pdf-contact">
         <div className="contact-cta-row"><div><span>Contact</span><h2>Have a part<br />in mind?</h2></div><div><p>Tell us about your next composite programme. Our team will help define the right material, process and performance specification.</p><a className="contact-primary" href={`mailto:${companyData.contact.email}`}>Email our engineers <span>→</span></a></div></div>
         <div className="contact-footer-content">

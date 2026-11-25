@@ -7725,12 +7725,15 @@ html, body, #root {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 18px;
+  margin-top: 22px;
+  padding: 11px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
   font-family: var(--font-hero);
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #fff;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .wp-link span {
@@ -7738,7 +7741,9 @@ html, body, #root {
 }
 
 .wp-link:hover {
-  color: #fff;
+  background: #fff;
+  border-color: #fff;
+  color: #05070a;
 }
 
 .wp-link:hover span {
@@ -7746,21 +7751,32 @@ html, body, #root {
 }
 
 .wp-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
   margin: 0;
   padding: 0;
   list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .wp-tags li {
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   font-family: var(--font-hero);
-  font-size: 13px;
-  line-height: 1.2;
-  color: #fff;
+  font-size: 14px;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.wp-tags li::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ac-accent);
 }
 
 @keyframes wp-up {
@@ -7771,7 +7787,7 @@ html, body, #root {
 /* Short laptop screens: keep everything inside the pinned frame */
 @media (max-height: 700px) and (min-width: 901px) {
   .wp-desc { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  .wp-tags li { padding: 8px 10px; font-size: 12px; }
+  .wp-tags li { padding: 9px 0; font-size: 13px; }
 }
 
 @media (max-width: 900px) {
@@ -8595,3 +8611,349 @@ html, body, #root {
 .pdf-site .pdf-capabilities-section {
   background: #0b111c !important;
 }
+
+/* Sectors intro image: drop the photo at public/images/sectors-intro.jpg.
+   It sits behind the intro and fades into the solid navy, which continues to the end of the section.
+   If the file is missing, the section simply stays solid navy. */
+.pdf-site .pdf-capabilities-section {
+  position: relative;
+  isolation: isolate;
+}
+
+.pdf-site .pdf-capabilities-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120vh;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(11, 17, 28, 0.85) 0%, rgba(11, 17, 28, 0.35) 55%, rgba(11, 17, 28, 0.15) 100%),
+    url('/images/sectors-intro.jpg') center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 100%);
+}
+
+
+/* Sectors layout: number + name left, large image centre, copy right */
+.wp-name {
+  font-family: var(--font-hero);
+  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+  color: rgba(255, 255, 255, 0.86);
+  margin-top: 12px;
+  animation: wp-up 0.7s var(--ac-ease) both;
+}
+
+@media (min-width: 901px) {
+  .pdf-site .wp-stage {
+    flex: 0 0 auto;
+    grid-template-columns: minmax(0, 0.28fr) min(38vw, 580px) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(28px, 3.4vw, 56px);
+    align-content: start;
+    padding: clamp(24px, 5vh, 48px) var(--wp-pad) 0;
+  }
+  .pdf-site .wp-body { display: contents; }
+  .pdf-site .wp-number { grid-column: 1; grid-row: 1; padding: 0; }
+  .pdf-site .wp-name { grid-column: 1; grid-row: 2; align-self: start; }
+  .pdf-site .wp-media {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    width: 100%;
+    height: min(64vh, 580px);
+  }
+  .pdf-site .wp-copy {
+    grid-column: 3;
+    grid-row: 1 / 3;
+    min-height: 0;
+    max-width: 560px;
+  }
+}
+
+@media (max-width: 900px) {
+  .wp-name { padding: 0 var(--wp-pad); }
+}
+
+/* Core capabilities as simple cards */
+.pdf-site .mc-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 1.4vw, 20px);
+}
+
+.pdf-site .mc-list li,
+.pdf-site .mc-list li:nth-last-child(-n + 2) {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  align-content: start;
+  padding: clamp(24px, 2.4vw, 34px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.025);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.pdf-site .mc-list li:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.pdf-site .mc-list__num {
+  grid-row: auto;
+  padding: 0;
+  margin-bottom: clamp(28px, 3.2vw, 44px);
+}
+
+@media (max-width: 1000px) {
+  .pdf-site .mc-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .pdf-site .mc-list { grid-template-columns: 1fr; }
+}
+
+/* Manufacturing: factory photo becomes the section heading, text over it */
+.pdf-site .manufacturing-capabilities__header {
+  min-height: min(82vh, 760px);
+  margin: calc(-1 * var(--ac-section-y)) calc(-1 * var(--ac-gutter)) 0;
+  padding: calc(var(--ac-section-y) + 40px) var(--ac-gutter) clamp(40px, 6vh, 72px);
+  align-content: end;
+  background:
+    linear-gradient(180deg, rgba(5, 7, 10, 0.35) 0%, rgba(5, 7, 10, 0.55) 55%, var(--ac-bg) 100%),
+    linear-gradient(90deg, rgba(5, 7, 10, 0.6) 0%, rgba(5, 7, 10, 0.15) 70%),
+    url('/images/about-factory-hero.png') center / cover no-repeat;
+}
+
+.pdf-site .manufacturing-capabilities__header p {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.pdf-site .manufacturing-capabilities .mc-feature {
+  display: none;
+}
+
+/* Sectors: simple tab row — names only, one hairline, active underline */
+.pdf-site .wp-tabs {
+  margin: 0 var(--wp-pad);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.pdf-site .wp-tab {
+  justify-self: start;
+  padding: clamp(18px, 3vh, 26px) 0 16px;
+}
+
+.pdf-site .wp-tab__step {
+  display: none;
+}
+
+.pdf-site .wp-tab__name {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  letter-spacing: 0;
+}
+
+.pdf-site .wp-tab::after {
+  display: block;
+  bottom: -1px;
+}
+
+@media (max-width: 900px) {
+  .pdf-site .wp-tab { min-width: 0; margin-right: 32px; }
+}
+
+/* Sectors: image loads in random pixel blocks (PixelReveal) */
+.pdf-site .wp-media {
+  position: relative;
+  animation: none;
+}
+
+.px-reveal {
+  position: absolute;
+  inset: -1px;
+  display: grid;
+  grid-template-columns: repeat(var(--px-cols), 1fr);
+  grid-template-rows: repeat(var(--px-rows), 1fr);
+  pointer-events: none;
+}
+
+.px-reveal span {
+  background: #000;
+  animation: px-out 0.01s linear both;
+}
+
+@keyframes px-out {
+  to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .px-reveal { display: none; }
+}
+
+/* Sectors: black background + vehicle lineup image under the heading,
+   its reflective floor fading into the black */
+.pdf-site .pdf-capabilities-section {
+  background: #000 !important;
+}
+
+.pdf-site .pdf-capabilities-section::before {
+  display: none;
+}
+
+/* Lineup image as the heading background: dimmed, slow settle-in zoom,
+   darkened behind the text and faded into the black at every edge */
+.pdf-site .pdf-capabilities-section {
+  overflow-x: clip;
+}
+
+.pdf-site .capabilities-intro-bar {
+  position: relative;
+  isolation: isolate;
+  min-height: min(92vh, 820px);
+  align-content: end;
+  padding-bottom: clamp(48px, 8vh, 96px);
+}
+
+.sectors-lineup {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sectors-lineup img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  filter: brightness(0.62) saturate(0.85);
+  transform: scale(1.08);
+  transition: transform 2.4s var(--ac-ease), filter 2.4s var(--ac-ease);
+}
+
+.pdf-capabilities-section.is-visible .sectors-lineup img {
+  transform: scale(1);
+}
+
+.sectors-lineup::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0) 22%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.55) 75%, rgba(0, 0, 0, 0.55) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+@media (max-width: 700px) {
+  .pdf-site .capabilities-intro-bar { min-height: 88vh; }
+  .sectors-lineup img { object-position: 45% 40%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sectors-lineup img { transform: none; transition: none; }
+}
+
+/* Sectors: background continuing below the lineup image to the end of the section —
+   a blurred, mirrored reflection of the lineup (like light spilling across a
+   polished floor) plus faint grain, fading out toward the end */
+.pdf-site .pdf-capabilities-section::before {
+  display: block;
+  content: '';
+  position: absolute;
+  top: calc(min(92vh, 820px) - 320px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto;
+  z-index: -1;
+  pointer-events: none;
+  background: url('/images/sectors-lineup.png') center bottom / 100% min(140vh, 1200px) no-repeat;
+  transform: scaleY(-1);
+  filter: blur(48px) brightness(0.75);
+  opacity: 0.32;
+  -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 14%, rgba(0, 0, 0, 0.6) 45%, transparent 100%);
+  mask-image: linear-gradient(0deg, transparent 0%, #000 14%, rgba(0, 0, 0, 0.6) 45%, transparent 100%);
+}
+
+.pdf-site .pdf-capabilities-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.sectors-lineup {
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+}
+
+/* Sectors: brushed-metal surface (v2) — dark gunmetal base, long fine brush
+   streaks (seamless wide tile), and soft highlights stretched along the grain
+   the way light catches brushed steel; fades out toward the end of the section */
+.pdf-site .pdf-capabilities-section {
+  background:
+    linear-gradient(180deg, #000 0%, #08090b 30%, #060708 70%, #000 100%) !important;
+}
+
+.pdf-site .pdf-capabilities-section::after {
+  opacity: 1;
+  background-color: transparent;
+  background-image:
+    radial-gradient(ellipse 70% 7% at 50% 34%, rgba(205, 215, 230, 0.07), transparent 70%),
+    radial-gradient(ellipse 60% 5% at 35% 58%, rgba(205, 215, 230, 0.045), transparent 70%),
+    radial-gradient(ellipse 55% 5% at 68% 80%, rgba(205, 215, 230, 0.035), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2560' height='512'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0008 0.9' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='1.3' intercept='-0.2'/%3E%3CfeFuncG type='linear' slope='1.3' intercept='-0.2'/%3E%3CfeFuncB type='linear' slope='1.3' intercept='-0.2'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+  background-size: 100% 100%, 100% 100%, 100% 100%, 2560px 512px;
+  background-position: 0 0, 0 0, 0 0, center top;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  mix-blend-mode: screen;
+  filter: opacity(0.2);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+}
+
+/* ==========================================================================
+   One background everywhere: pure dark black
+   (sectors brushed metal + reflection glow switched off)
+   ========================================================================== */
+:root,
+.pdf-site {
+  --ac-bg: #000;
+}
+
+html,
+body,
+.pdf-site,
+.pdf-site .ac-menu,
+.pdf-site .pdf-hero,
+.pdf-site .manufacturing-capabilities,
+.pdf-site .pdf-products,
+.pdf-site .pdf-contact,
+.pdf-site footer {
+  background-color: #000 !important;
+}
+
+.pdf-site .pdf-capabilities-section {
+  background: #000 !important;
+}
+
+.pdf-site .pdf-capabilities-section::before,
+.pdf-site .pdf-capabilities-section::after {
+  display: none !important;
+}
+
+.pdf-site .manufacturing-capabilities::before {
+  display: none !important;
+}
+
+/* Hero: three.js material-story animation behind the centred text */
+.pdf-site .pdf-hero { position: relative; overflow: hidden; }
+.pdf-site .pdf-hero .pdf-hero-inner { position: relative; z-index: 1; }

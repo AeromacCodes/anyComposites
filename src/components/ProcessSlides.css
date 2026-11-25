@@ -1,0 +1,115 @@
+.ps-stage {
+  position: relative;
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+  background: #0b1017;
+}
+
+.ps-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.04);
+  filter: brightness(0.8);
+  transition: opacity 1s ease, transform 6s ease;
+}
+
+.ps-img.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.ps-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 45%, rgba(5, 7, 10, 0.85) 100%);
+}
+
+.ps-caption {
+  position: absolute;
+  left: clamp(20px, 3vw, 44px);
+  bottom: clamp(20px, 3vw, 40px);
+  z-index: 1;
+  max-width: 520px;
+  animation: ps-in 0.8s ease both;
+}
+
+.ps-caption h4 {
+  margin: 0;
+  font-family: var(--font-hero);
+  font-size: clamp(1.5rem, 2.4vw, 2.3rem);
+  font-weight: 400;
+  color: #fff;
+}
+
+.ps-caption p {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.ps-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 28px);
+  margin-top: 20px;
+}
+
+.ps-step {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-family: var(--font-hero);
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.ps-step:hover,
+.ps-step.is-active {
+  color: #fff;
+}
+
+.ps-step__bar {
+  display: block;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.ps-step.is-active .ps-step__bar span {
+  display: block;
+  height: 100%;
+  background: var(--ac-accent);
+  animation: ps-fill 5s linear both;
+}
+
+@keyframes ps-fill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes ps-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 700px) {
+  .ps-stage { aspect-ratio: 4 / 5; }
+  .ps-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-img { transition: opacity 0.4s ease; transform: none; }
+  .ps-caption { animation: none; }
+}
