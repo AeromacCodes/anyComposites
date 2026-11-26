@@ -97,3 +97,47 @@
   .hero-forge__stages li { display: none; }
   .hero-forge__stages li.is-active { display: block; }
 }
+
+/* chapter title above the caption */
+.hero-forge__title {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-hero);
+  font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.hero-forge__title span {
+  margin-right: 12px;
+  font-size: 0.55em;
+  vertical-align: middle;
+}
+
+.hero-forge__caption p {
+  margin: 0;
+}
+
+/* skip control: quiet, bottom left (the cookie banner owns bottom right); the only UI during the sequence */
+.hero-forge__skip {
+  position: absolute;
+  left: clamp(16px, 3vw, 40px);
+  bottom: clamp(16px, 4vh, 36px);
+  z-index: 2;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  font-family: var(--font-hero);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.hero-forge__skip:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}

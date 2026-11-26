@@ -1,27 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { companyData } from '../data/anyCompositesData';
 import './SiteNavbar.css';
 
 /*
   Koenigsegg-style navigation:
-  - no background: name on the left, a few links in the middle, two-line menu toggle on the right
+  - no background: name on the left, two-line menu toggle on the right
   - hides on scroll down, returns on scroll up
   - toggle opens a full-screen menu
 */
 
-const centerLinks = [
-  { label: 'About us', href: '#about-us' },
-  { label: 'Sectors', href: '#capabilities' },
-  { label: 'Capabilities', href: '#manufacturing' },
-  { label: 'Products', href: '#products' },
-  { label: 'Contact', href: '#contact' },
-];
-
 const menuLinks = [
   { label: 'Home', href: '#home' },
-  ...centerLinks.slice(0, 4),
-  { label: 'Careers', href: '#careers' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'About us', href: '#about-us' },
+  { label: 'Sectors', href: '#capabilities' },
 ];
 
 const sectorLinks = [
@@ -71,7 +61,6 @@ export default function SiteNavbar() {
   }, [open]);
 
   const close = () => setOpen(false);
-  const { email, phone, hq } = companyData.contact;
 
   const navClass = ['ac-nav', hidden && !open ? 'is-hidden' : '', scrolled ? 'is-scrolled' : '', open ? 'is-open' : '']
     .filter(Boolean)
@@ -83,12 +72,6 @@ export default function SiteNavbar() {
         <a href="#home" className="ac-nav__brand" onClick={close} aria-label="Any Composites home">
           anycomposites
         </a>
-
-        <nav className="ac-nav__links" aria-label="Primary">
-          {centerLinks.map((link) => (
-            <a key={link.href} href={link.href} onClick={close}>{link.label}</a>
-          ))}
-        </nav>
 
         <button
           ref={toggleRef}
@@ -112,27 +95,16 @@ export default function SiteNavbar() {
                 {link.label}
               </a>
             ))}
-          </nav>
-
-          <aside className="ac-menu__aside">
-            <div className="ac-menu__group" style={{ '--i': 2 }}>
-              <span className="ac-menu__heading">Sectors</span>
-              {sectorLinks.map((s) => (
-                <a key={s.href} href={s.href} onClick={close}>{s.label}</a>
+            <ol className="ac-menu__subs">
+              {sectorLinks.map((s, i) => (
+                <li key={s.href}>
+                  <a href={s.href} onClick={close} style={{ '--i': menuLinks.length + i }}>
+                    <span aria-hidden="true">{i + 1}.</span> {s.label}
+                  </a>
+                </li>
               ))}
-            </div>
-
-            <div className="ac-menu__group" style={{ '--i': 3 }}>
-              <span className="ac-menu__heading">Get in touch</span>
-              <a href={`mailto:${email}`}>{email}</a>
-              <a href={`tel:${phone.replaceAll(' ', '')}`}>{phone}</a>
-              <address>{hq.address}</address>
-            </div>
-
-            <a className="ac-menu__cta" href="#contact" onClick={close} style={{ '--i': 4 }}>
-              Request a quote <span aria-hidden="true">→</span>
-            </a>
-          </aside>
+            </ol>
+          </nav>
         </div>
       </div>
     </>

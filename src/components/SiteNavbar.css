@@ -347,3 +347,93 @@
 .ac-nav__toggle span {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.45);
 }
+
+/* ---- Koenigsegg-style: logo + menu only, set lower from the top edge ---- */
+.ac-nav {
+  --nav-y: clamp(28px, 5.6vw, 80px);
+  grid-template-columns: 1fr auto;
+}
+
+.ac-nav__brand {
+  font-size: clamp(18px, 1.5vw, 22px);
+}
+
+.ac-nav.is-scrolled {
+  padding-top: calc(22px + env(safe-area-inset-top, 0px));
+}
+
+/* ---- Scrolled (shown again on scroll up): solid graphite bar ---- */
+.ac-nav.is-scrolled {
+  padding-top: calc(clamp(22px, 2.6vw, 36px) + env(safe-area-inset-top, 0px));
+  padding-bottom: clamp(22px, 2.6vw, 36px);
+}
+
+.ac-nav::before {
+  inset: 0;
+  background: linear-gradient(105deg, #3a3c41 0%, #3f4146 55%, #45474c 100%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ---- Menu: centred list over a dimmed page (Home, About us, Sectors + 5) ---- */
+.pdf-site .ac-menu,
+.ac-menu {
+  background: rgba(10, 11, 13, 0.58) !important;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.ac-menu__inner {
+  grid-template-columns: 1fr;
+  align-content: center;
+  justify-items: center;
+  padding: clamp(96px, 12vh, 140px) 20px clamp(40px, 6vh, 72px);
+}
+
+.ac-menu__primary {
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 2.2vh, 26px);
+  text-align: center;
+}
+
+.ac-menu__primary a {
+  font-size: clamp(2.2rem, 4.6vw, 4rem);
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+}
+
+.ac-menu__primary a:hover {
+  transform: none;
+}
+
+.ac-menu__subs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(6px, 1.2vh, 12px);
+  margin: clamp(2px, 0.6vh, 8px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ac-menu__primary .ac-menu__subs a {
+  font-size: clamp(1.05rem, 1.6vw, 1.45rem);
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.ac-menu__subs a span {
+  color: var(--ac-accent, #2f80ff);
+  margin-right: 0.3em;
+}
+
+.ac-menu__primary:hover .ac-menu__subs a {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.ac-menu__primary .ac-menu__subs a:hover {
+  color: #fff;
+  transform: none;
+}

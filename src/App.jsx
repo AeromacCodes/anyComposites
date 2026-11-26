@@ -7,11 +7,10 @@ import CareersPage from './CareersPage';
 import SiteNavbar from './components/SiteNavbar';
 import CookieConsent from './components/CookieConsent';
 import ScrambleText from './components/ScrambleText';
-import CarbonPixelIntro from './components/CarbonPixelIntro';
 import HeroForge from './components/HeroForge';
 import OurWork from './components/OurWork';
+import ProductCarousel from './components/ProductCarousel';
 import ProcessSteps from './components/ProcessSteps';
-import PixelReveal from './components/PixelReveal';
 
 const sectors = [
   {
@@ -124,18 +123,9 @@ const coreCapabilities = [
   { title: 'Custom Solutions', description: 'End-to-end support from prototyping to production with tailored composite solutions.' },
 ];
 
-const deliverables = [
-  { title: 'Reduced Weight', description: 'Improve efficiency & performance' },
-  { title: 'Enhanced Strength', description: 'Built for safety & durability' },
-  { title: 'Better Efficiency', description: 'Optimize performance' },
-  { title: 'Cost Optimization', description: 'Long-term value & savings' },
-  { title: 'Sustainable Future', description: 'Eco-friendly composite solutions' },
-];
-
 export default function App() {
   const [route, setRoute] = useState(() => window.location.hash);
   const [heroTextReady, setHeroTextReady] = useState(false);
-  const [introDone, setIntroDone] = useState(false);
   const [capabilitiesVisible, setCapabilitiesVisible] = useState(false);
   const [productsVisible, setProductsVisible] = useState(false);
   const [activeSector, setActiveSector] = useState(0);
@@ -214,11 +204,10 @@ export default function App() {
   if (route === '#careers') return <><CareersPage /><CookieConsent /></>;
   if (route.startsWith('#sector-')) return <><SectorPage sector={route.slice(8)} /><CookieConsent /></>;
   return <div className="pdf-site">
-    <CarbonPixelIntro onComplete={() => setIntroDone(true)} />
     <SiteNavbar />
     <main>
       <section id="home" className="pdf-hero">
-        <HeroForge play={introDone} onFinish={() => setHeroTextReady(true)} />
+        <HeroForge onFinish={() => setHeroTextReady(true)} />
         <div className="pdf-hero-inner">
           <h1 className={`hero-statement ${heroTextReady ? 'is-animated' : ''}`}>
             <div className="line-wrapper">
@@ -294,7 +283,6 @@ export default function App() {
                     alt=""
                     onError={(e) => { const fb = sectors[activeSector].fallback; if (fb && !e.currentTarget.src.endsWith(fb)) e.currentTarget.src = fb; }}
                   />
-                  <PixelReveal />
                 </a>
 
                 <div className="wp-copy">
@@ -331,47 +319,64 @@ export default function App() {
             <p>A wide range of composite materials and engineered components, tailored to the demands of every industry we serve.</p>
           </figcaption>
         </figure>
-        <div className="mc-deliver">
-          <h3 className="mc-sub">What we deliver</h3>
-          <ul>
-            {deliverables.map(({ title, description }) => (
-              <li key={title}><strong>{title}</strong><span>{description}</span></li>
-            ))}
-          </ul>
-        </div>
       </section>
       <section id="products" ref={productsRef} className={`pdf-products product-catalogue ${productsVisible ? 'is-visible' : ''}`}>
-        <header className="product-catalogue-heading"><div><span>Products</span><h2>Standard range</h2></div><p>Carbon and glass fibre sheets, tubes, rods and connectors, supplied to size for prototypes, production runs and machined parts.</p></header>
-        <div className="pc-grid">
-          {products.map(([number, name, features, image]) => (
-            <article className="pc-item" key={name}>
-              <a href="#contact" className="pc-media" aria-label={`Request a specification for ${titleCase(name)}`}>
-                <img
-                  src={`/images/product-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.jpg`}
-                  alt=""
-                  loading="lazy"
-                  onError={(e) => { if (!e.currentTarget.src.endsWith(image)) e.currentTarget.src = image; }}
-                />
-              </a>
-              <div className="pc-head"><h3>{titleCase(name)}</h3><span>{number}</span></div>
-              <ul className="pc-specs">
-                {features.split('|').map((feature) => <li key={feature}>{feature === feature.toUpperCase() ? titleCase(feature) : feature}</li>)}
-              </ul>
-              <a href="#contact" className="pc-link">Request specification <span aria-hidden="true">→</span></a>
-            </article>
-          ))}
-        </div>
+        <header className="product-catalogue-heading pc-simple-head"><div><span>Products</span><h2>Standard range</h2></div></header>
+        <ProductCarousel products={products} titleCase={titleCase} />
       </section>
       <OurWork />
-      <section id="contact" className="pdf-contact">
-        <div className="contact-cta-row"><div><span>Contact</span><h2>Have a part<br />in mind?</h2></div><div><p>Tell us about your next composite programme. Our team will help define the right material, process and performance specification.</p><a className="contact-primary" href={`mailto:${companyData.contact.email}`}>Email our engineers <span>→</span></a></div></div>
-        <div className="contact-footer-content">
-          <form className="footer-enquiry" onSubmit={(event) => event.preventDefault()}><h3>Project enquiry</h3><input type="text" name="name" placeholder="Your name" aria-label="Your name" required /><input type="email" name="email" placeholder="Work email" aria-label="Work email" required /><textarea name="project" placeholder="Project brief" aria-label="Project brief" required /><button type="submit">Send enquiry <span>→</span></button></form>
-          <div className="contact-identity"><div className="contact-brand"><span>anycomposites</span></div><p>Advanced composite engineering and manufacturing for high-performance applications.</p><a href={`mailto:${companyData.contact.email}`}>{companyData.contact.email}</a><a href={`tel:${companyData.contact.phone.replaceAll(' ', '')}`}>{companyData.contact.phone}</a></div>
-          <div className="footer-quick-links"><div><h3>Company</h3><a href="#about-us">About us</a><a href="#capabilities">Our capabilities</a><a href="#careers">Careers</a><a href="#contact">Contact us</a></div><div><h3>Industries</h3><a href="#sector-aerospace">Aerospace</a><a href="#sector-uav-defence">UAV &amp; Defence</a><a href="#sector-automotive">Automotive</a><a href="#sector-medical">Medical</a><a href="#sector-sports">Sports</a></div></div>
-          <div className="contact-social"><div className="social-links"><a href="https://www.linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={19} /></a><a href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={19} /></a></div><address>{companyData.contact.hq.address}</address></div>
+      <section id="contact" className="pdf-contact ft">
+        <div className="ft-card">
+          <div className="ft-left">
+            <div className="ft-contact">
+              <h3 className="ft-label">Contact</h3>
+              <address>
+                C-94, TTC Industrial Area<br />
+                MIDC Turbhe, Navi Mumbai<br />
+                Maharashtra 400705<br />
+                India
+              </address>
+              <a href={`tel:${companyData.contact.phone.replaceAll(' ', '')}`}>{companyData.contact.phone}</a>
+              <a href={`mailto:${companyData.contact.email}`}>{companyData.contact.email}</a>
+              <img className="ft-flag" src="/images/flag-india.png" alt="India" width="58" height="39" />
+            </div>
+            <div className="ft-bottom-left">
+              <span className="ft-wordmark">anycomposites</span>
+              <nav className="ft-legal" aria-label="Legal">
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Use</a>
+              </nav>
+            </div>
+          </div>
+          <div className="ft-right">
+            <div className="ft-cols">
+              <div>
+                <h3 className="ft-label">Sectors</h3>
+                <a href="#sector-aerospace">Aerospace</a>
+                <a href="#sector-uav-defence">UAV &amp; Defence</a>
+                <a href="#sector-automotive">Automotive</a>
+                <a href="#sector-medical">Medical</a>
+                <a href="#sector-sports">Sports</a>
+              </div>
+              <div>
+                <h3 className="ft-label">About Any Composites</h3>
+                <a href="#about-us">About us</a>
+                <a href="#manufacturing">Capabilities</a>
+                <a href="#products">Products</a>
+                <a href="#our-work">Our work</a>
+                <a href="#careers">Careers</a>
+                <a href={`mailto:${companyData.contact.email}`}>Contact</a>
+              </div>
+            </div>
+            <div className="ft-bottom-right">
+              <div className="ft-social">
+                <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={15} /></a>
+                <a href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={15} /></a>
+              </div>
+              <p className="ft-copy">© {new Date().getFullYear()} {companyData.legalName}. All rights reserved.</p>
+            </div>
+          </div>
         </div>
-        <p className="contact-copyright">© {new Date().getFullYear()} {companyData.legalName}. All rights reserved.</p>
       </section>
     </main>
     <CookieConsent />
