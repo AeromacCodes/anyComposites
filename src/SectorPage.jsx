@@ -50,7 +50,7 @@ const sectorData = {
     title: <>AUTOMOTIVE &amp;<br /><em>MOBILITY.</em></>,
     statement: <>ENGINEERED FOR THE ROAD.<br />DESIGNED FOR PERFORMANCE.</>,
     intro: 'High-performance composite solutions that deliver superior strength, reduced weight, and exceptional aesthetics for supercars and next-gen mobility.',
-    image: '/images/hero_carbon_weave.jpg',
+    image: '/images/sector-automotive.jpg',
     solutions: [
       ['EXTERIOR BODY PANELS', 'Lightweight Hoods & Roofs|Aerodynamic Surfaces|Impact Resistance|Flawless Class-A Weaves'],
       ['INTERIOR COMPONENTS', 'Prepreg Dash & Console Trim|Structural Seat Shells|Ergonomic Design|Gloss & Matte Finishes'],
@@ -133,7 +133,7 @@ export default function SectorPage({ sector }) {
     <div ref={pageRef} className="sector-page anime-motion">
       <SiteNavbar />
       <main>
-        <section className="sector-hero" style={{ '--sector-image': `url(${data.image})` }}>
+        <section className={`sector-hero sector-hero--${sector}`} style={{ '--sector-image': `url(${data.image})` }}>
           <div className="sector-hero-content">
             <span className="sector-hero-badge">{data.label}</span>
             <h1>{data.title}</h1>
